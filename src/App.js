@@ -3,7 +3,7 @@ import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
 
 import { formatSeasons } from "./utils/formatSeasons";
-import { getData } from './api/getData'
+import { fetchShow } from './api/fetchShow'
 
 import Episodes from "./components/Episodes";
 import "./styles.css";
@@ -15,14 +15,11 @@ export default function App() {
   const episodes = seasons[selectedSeason] || [];
 
   useEffect(() => {
-    const fetchShow = () => {
-      getData()
+      fetchShow()
         .then(res => {
           setShow(res.data);
           setSeasons(formatSeasons(res.data._embedded.episodes));
         });
-    };
-    fetchShow();
   }, []);
 
   const handleSelect = e => {
@@ -36,7 +33,7 @@ export default function App() {
   return (
     <div className="App">
       <img className="poster-img" src={show.image.original} alt={show.name} />
-      <h1>{show.name}</h1>
+      <h1 data-testid='showName'>{show.name}</h1>
       {parse(show.summary)}
       <Dropdown
         options={Object.keys(seasons)}
