@@ -15,6 +15,19 @@ test('app fetches and renders data', async () => {
     render(<App />)
 
     await waitFor(() => {
-        expect(screen.getByTestId('showName'))
+        const showName = screen.getByTestId('showName')
+        const description = screen.getByText(/a love letter/i)
+        const select = screen.getByText(/select a season/i)
+        expect(showName).toHaveTextContent("Stranger Things")
+        expect(description)
+        expect(select)
     })
+
+
+
+    // const seasonOne = screen.getByText('/season 1/i')
+        // expect(seasonOne)
+        // fireEvent.click(seasonOne)
+
+        // const episodes = screen.getAllByTestId('episode')
 })
