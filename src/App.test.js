@@ -5,29 +5,36 @@ import { showData } from './mockData/showData'
 
 //Import fetchShows function under different name
 import { fetchShow as mockFetchShow} from './api/fetchShow'
+import { act } from 'react-dom/test-utils'
+import userEvent from '@testing-library/user-event'
 
 jest.mock('./api/fetchShow')
 
 const mockData = showData
 
-test('app fetches and renders data', async () => {
-    mockFetchShow.mockResolvedValueOnce(mockData)
-    render(<App />)
+test("renders with data", async () => {
+    mockFetchShow.mockResolvedValueOnce(mockData);
+    const {rerender, getByText } = render(<App />)
+    screen.debug();
+    // await act(async () => {
+    //     await rerender(<App />);
+    //     screen.debug();
+    // })
 
-    await waitFor(() => {
-        const showName = screen.getByTestId('showName')
-        const description = screen.getByText(/a love letter/i)
-        const select = screen.getByText(/select a season/i)
-        expect(showName).toHaveTextContent("Stranger Things")
-        expect(description)
-        expect(select)
+    //Alternative way to do it...
+    await waitFor( async () => {
+        screen.debug();
     })
+    const showName = screen.getByTestId('showName')
+    const description = screen.getByText(/a love letter/i)
+    const dropDown = getByText(/select a season/i)
+    userEvent.click(dropDown)
+    screen.debug()
+    const seasonOne = getByText(/season 1/i)
+    expect(seasonOne)
+    expect(showName)
+    expect(description)
 
-
-
-    // const seasonOne = screen.getByText('/season 1/i')
-        // expect(seasonOne)
-        // fireEvent.click(seasonOne)
-
-        // const episodes = screen.getAllByTestId('episode')
+    const episodes = screen.getAllByTestId('episode')
+    expect(episodes)
 })
